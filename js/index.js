@@ -1,6 +1,4 @@
 $(function () {
-    //  com = 189;
-    var ros = [4, 3, 2, 5, 6, 1, 4, 3, 2, 5, 6, 1, 5, 5, 4, 5];
     // 指南针
     var compass = {
         tooltip: {
@@ -98,7 +96,7 @@ $(function () {
                 show: false
             },
             data: [{
-                value:189
+                value: 189
             }]
         }],
     };
@@ -209,26 +207,160 @@ $(function () {
                 fontSize: 28,
             },
             data: [{
-                value: ros
+                value: [4, 3, 2, 5, 6, 1, 4, 3, 2, 5, 6, 1, 5, 5, 4, 5]
             }],
         }]
     }
     var myChart2 = _Chart('myChart2', rose);
 
+    // 温度仪表盘
+    var temp = {
+        tooltip: {
+            formatter: '当前温度：{c}°C'
+        },
+        grid:{
+            top:20,
+        },
+        series: [
+            //内圈
+            {
+                type: "gauge",
+                center: ["50%", "50%"], // 默认全局居中
+                radius: "50%",
+                min: 0,
+                max: 10,
+                startAngle: 270,
+                endAngle: -89.99999,
+                splitNumber: 10,
+                axisLabel: {
+                    // 刻度标签
+                    show: false,
+                },
+                axisTick: {
+                    // 刻度
+                    length: 5, // 属性length控制线长
+                    lineStyle: {
+                        // 属性lineStyle控制线条样式
+                        color: '#00ffff',
+                    },
+                },
+                splitLine: {
+                    // 分隔线
+                    show: false,
+                },
+                pointer: {
+                    width: 0,
+                    shadowColor: "#fff", //默认透明
+                    shadowBlur: 5,
+                },
+                detail: {
+                    show: false,
+                },
+                axisLine: {
+                    // 坐标轴线
+                    lineStyle: {
+                        // 属性lineStyle控制线条样式
+                        color: [
+                            [1, '#00ffff']
+                        ],
+                        width: 0,
+                        shadowBlur: 10,
+                    },
+                }
+            },
+            //外圈
+            {
+                type: "gauge",
+                center: ["50%", "50%"], // 默认全局居中
+                radius: "100%",
+                min: 0,
+                max: 50,
+                name: "室内",
+                axisLine: {
+                    // 坐标轴线
+                    lineStyle: {
+                        color: [
+                            [1, "#00ffff"]
+                        ], // 属性lineStyle控制线条样式
+                        width: 2,
+                        shadowBlur: 10,
+                    },
+                    // 刻度标签
+                    show: true,
+                },
+                itemStyle: {
+                    normal: {
+                        color: "#FF0000",
+                    },
+                },
+                axisTick: {
+                    length: 7,
+                    lineStyle: {
+                        // 属性lineStyle控制线条样式
+                        color: '#00ffff',
+                    },
+                    // 刻度线与轴线的距离
+                    distance: 0
+                },
+                axisLabel: {
+                    // 坐标轴小标记
+                    textStyle: {
+                        // 属性lineStyle控制线条样式
+                        fontWeight: "bolder",
+                        fontSize: 12,
+                        fontFamily: "numfont",
+                    },
+                    distance: 2,
+                    color: '#fff'
+                },
+                splitLine: {
+                    // 分隔线
+                    length: 5, // 属性length控制线长
+                    lineStyle: {
+                        // 属性lineStyle（详见lineStyle）控制线条样式
+                        width: 2,
+                    },
+                },
+                pointer: {
+                    width: 3,
+                    length: "90%",
+                },
+                detail: {
+                    valueAnimation: true,
+                    fontSize: 14,
+                    formatter: '{value} °C',
+                    offsetCenter: [0, '80%'],
+                    color: '#00ffff'
+                },
+                data: [{
+                    value: 23
+                }],
+                progress: {
+                    show: true,
+                    width: 2,
+                },
+            },
+        ],
+    }
+    var myChart3 = _Chart('myChart3',temp)
 
     // 自适应
     window.onresize = () => {
         myChart1.resize();
         myChart2.resize();
+        myChart3.resize();
     }
 
-    setInterval(()=>{
+    setInterval(() => {
 
-        compass.series[2].data[0].value = _random(0,360);
+        compass.series[2].data[0].value = _random(0, 360);
+        temp.series[1].data[0].value = _random(0,50);
+
         _Chart('myChart1', compass);
+        _Chart('myChart3', temp);
 
 
-    },1000)
+    }, 1000)
 
 })
 
@@ -257,7 +389,6 @@ function _Chart(id, option, flag) {
  * @param {Number} upperValue 结束范围
  * @returns 
  */
- function _random(lowerValue, upperValue) {
+function _random(lowerValue, upperValue) {
     return Math.floor(Math.random() * (upperValue - lowerValue + 1) + lowerValue);
-  }
-  
+}
